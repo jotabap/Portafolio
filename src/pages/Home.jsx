@@ -1,6 +1,6 @@
 export default function Home() {
     return (
-      <div className="min-h-screen bg-gray-200 p-6">
+      <div className="min-h-screen bg-gray-200 px-8 py-6">
         <div className="max-w-7xl mx-auto bg-white border-2 border-black rounded-lg shadow-2xl overflow-hidden">
           <div className="container mx-auto px-6 py-12">
             <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -15,9 +15,9 @@ export default function Home() {
                     Passionate about creating innovative solutions through code
                   </p>
                   <div className="flex justify-center md:justify-start space-x-4 mt-8">
-                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors">
+                    <a href="/language-demo" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors flex items-center justify-center">
                       View My Work
-                    </button>
+                    </a>
                     <button className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-6 py-3 rounded-lg transition-colors">
                       Contact Me
                     </button>
