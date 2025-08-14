@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function Home() {
     return (
       <div className="min-h-screen bg-gray-200 px-8 py-6">
@@ -15,9 +17,9 @@ export default function Home() {
                     Passionate about creating innovative solutions through code
                   </p>
                   <div className="flex justify-center md:justify-start space-x-4 mt-8">
-                    <a href="/language-demo" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors flex items-center justify-center">
+                    <Link to="/language-demo" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors flex items-center justify-center">
                       View My Work
-                    </a>
+                    </Link>
                     <button className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-6 py-3 rounded-lg transition-colors">
                       Contact Me
                     </button>
