@@ -3,21 +3,74 @@ import astroLogo from '../assets/astro.svg';
 import background from '../assets/background.svg';
 ---
 
-<div>
-    <section class="home">
-        <img src={background.src} alt="Background" class="background" />
-        <div class="content">          
-            <h1>John Batista Alvarez</h1>
-            <h3>Software Developer</h3>
+
+<div class="content">          
+    <div class="profile-section">
+        <img src="/images/photo.jpg" alt="John Batista Alvarez" class="profile-photo" />
+        <div class="text-content">            
             <p>
                 Welcome to my portfolio. Here you will find my projects, skills, and experience as a developer.                
             </p>
-            <a href="#projects" class="btn">View Projects</a>
-            <a href="/cv.pdf" class="btn" style="margin-left: 1rem;" download>Download CV</a>
+            <div class="buttons">
+                <a href="#projects" class="btn">View Projects</a>
+                <a href="/cv.pdf" class="btn secondary" download>Download CV</a>
+            </div>
         </div>
-    </section>
+    </div>
+</div>
 
     <style>
+        .text-content h1 {
+    margin-top: 3cm;
+}
+        .profile-section {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    max-width: 800px;
+}
+
+.profile-photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+.text-content {
+    flex: 1;
+}
+
+.buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.btn.secondary {
+    background: transparent;
+    color: #ff5d01;
+    border: 2px solid #ff5d01;
+}
+
+.btn.secondary:hover {
+    background: #ff5d01;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .profile-section {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .profile-photo {
+        width: 120px;
+        height: 120px;
+    }
+}
     .home {
         position: relative;
         min-height: 60vh;
@@ -62,5 +115,44 @@ import background from '../assets/background.svg';
     .btn:hover {
         background: #ff8800;
     }
+    
+[data-theme="dark"] .content {
+    background: transparent !important;
+    color: #f9fafb !important;
+}
+
+[data-theme="dark"] .profile-section {
+    background: rgba(31, 31, 31, 0.8) !important;
+    backdrop-filter: blur(10px) !important;
+    border-radius: 16px;
+    padding: 2rem;
+}
+
+[data-theme="dark"] .text-content h1 {
+    color: #f9fafb !important;
+}
+
+[data-theme="dark"] .text-content h3 {
+    color: #d1d5db !important;
+}
+
+[data-theme="dark"] .text-content p {
+    color: #9ca3af !important;
+}
+
+[data-theme="dark"] .btn {
+    background: #ff5d01 !important;
+    color: white !important;
+}
+
+[data-theme="dark"] .btn.secondary {
+    background: transparent !important;
+    color: #ff5d01 !important;
+    border-color: #ff5d01 !important;
+}
+
+[data-theme="dark"] .btn.secondary:hover {
+    background: #ff5d01 !important;
+    color: white !important;
+}
     </style>
-</div>
