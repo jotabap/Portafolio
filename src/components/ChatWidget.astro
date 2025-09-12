@@ -1,0 +1,171 @@
+<div class="chat-widget">
+  <div class="chat-container">
+    <div class="chat-header">
+      <h3 class="chat-title">Ask about me...</h3>
+      <button id="chat-toggle" class="chat-toggle" aria-label="Minimizar chat">−</button>
+    </div>
+    <div id="chat-log" class="chat-log"></div>
+    <form id="chat-form" class="chat-form">
+      <input 
+        id="chat-input" 
+        class="chat-input" 
+        placeholder="Ask anything..."
+        aria-label="Chat message"
+      />
+      <button type="submit" class="chat-button" aria-label="Send message">
+        Send
+      </button>
+    </form>
+  </div>
+</div>
+
+<style>
+  .chat-widget {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 1000;
+  }
+
+  .chat-container {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 1rem;
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    padding: 1rem;
+    width: 20rem;
+    max-width: calc(100vw - 3rem);
+  }
+
+  .chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .chat-title {
+    font-weight: bold;
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .chat-toggle {
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+  }
+
+  .chat-toggle:hover {
+    background: #f3f4f6;
+  }
+
+  .chat-log {
+    height: 10rem;
+    overflow-y: auto;
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background: #fafafa;
+  }
+
+  .chat-form {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .chat-input {
+    flex: 1;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  .chat-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 1px #3b82f6;
+  }
+
+  .chat-button {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .chat-button:hover:not(:disabled) {
+    background: #2563eb;
+  }
+
+  .chat-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Modo oscuro */
+  [data-theme="dark"] .chat-container {
+    background: #1f2937;
+    border-color: #374151;
+    color: #f9fafb;
+  }
+
+  [data-theme="dark"] .chat-log {
+    background: #111827;
+    border-color: #374151;
+    color: #f9fafb;
+  }
+
+  [data-theme="dark"] .chat-input {
+    background: #111827;
+    border-color: #374151;
+    color: #f9fafb;
+  }
+
+  [data-theme="dark"] .chat-toggle:hover {
+    background: #374151;
+  }
+
+  @media (max-width: 640px) {
+    .chat-widget {
+      bottom: 1rem;
+      right: 1rem;
+    }
+
+    .chat-container {
+      width: calc(100vw - 2rem);
+    }
+  }
+   
+  .error-message {
+    color: #ef4444;
+    font-size: 0.75rem;
+  }
+
+  [data-theme="dark"] .error-message {
+    color: #fca5a5;
+  }
+  
+</style>
+
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', async () => {
+    try {
+      const { initializeChat } = await import('/src/scripts/chat.js');
+      initializeChat();
+    } catch (error) {
+      console.error('Error loading chat script:', error);
+    }
+  });
+</script>
