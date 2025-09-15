@@ -162,7 +162,7 @@
 <script is:inline>
   document.addEventListener('DOMContentLoaded', async () => {
     try {
-      const { initializeChat } = await import('/src/scripts/chat.js');
+      const { initializeChat } = await import('/chat.js');
       initializeChat();
     } catch (error) {
       console.error('Error loading chat script:', error);
