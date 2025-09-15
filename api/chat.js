@@ -87,20 +87,39 @@ app.http('chat', {
             const apiKey = process.env.AZURE_OPENAI_API_KEY;
             const deploymentName = process.env.AZURE_OPENAI_DEPLOYMENT_CHAT;
             const embeddingDeployment = process.env.AZURE_OPENAI_DEPLOYMENT_EMBED;
-            const apiVersion = process.env.AZURE_OPENAI_API_VERSION;
+            const apiVersion = process.env.AZURE_OPENAI_API_VERSION || '2024-02-15-preview';
             
             // Configuración de Azure Search desde variables de entorno
             const searchEndpoint = process.env.AZURE_SEARCH_ENDPOINT;
             const searchKey = process.env.AZURE_SEARCH_KEY;
             const searchIndex = process.env.AZURE_SEARCH_INDEX;
 
+            context.log('🔧 Environment variables check:');
+            context.log(`- AZURE_OPENAI_ENDPOINT: ${azureEndpoint ? 'SET' : 'MISSING'}`);
+            context.log(`- AZURE_OPENAI_API_KEY: ${apiKey ? 'SET' : 'MISSING'}`);
+            context.log(`- AZURE_OPENAI_DEPLOYMENT_CHAT: ${deploymentName ? 'SET' : 'MISSING'}`);
+            context.log(`- AZURE_OPENAI_DEPLOYMENT_EMBED: ${embeddingDeployment ? 'SET' : 'MISSING'}`);
+            context.log(`- AZURE_SEARCH_ENDPOINT: ${searchEndpoint ? 'SET' : 'MISSING'}`);
+            context.log(`- AZURE_SEARCH_KEY: ${searchKey ? 'SET' : 'MISSING'}`);
+            context.log(`- AZURE_SEARCH_INDEX: ${searchIndex ? 'SET' : 'MISSING'}`);
+
             // Validar que todas las variables estén configuradas
             if (!azureEndpoint || !apiKey || !deploymentName || !embeddingDeployment || !searchEndpoint || !searchKey || !searchIndex) {
                 context.log('❌ Faltan variables de entorno de Azure');
+                const missingVars = [];
+                if (!azureEndpoint) missingVars.push('AZURE_OPENAI_ENDPOINT');
+                if (!apiKey) missingVars.push('AZURE_OPENAI_API_KEY');
+                if (!deploymentName) missingVars.push('AZURE_OPENAI_DEPLOYMENT_CHAT');
+                if (!embeddingDeployment) missingVars.push('AZURE_OPENAI_DEPLOYMENT_EMBED');
+                if (!searchEndpoint) missingVars.push('AZURE_SEARCH_ENDPOINT');
+                if (!searchKey) missingVars.push('AZURE_SEARCH_KEY');
+                if (!searchIndex) missingVars.push('AZURE_SEARCH_INDEX');
+                context.log(`Missing vars: ${missingVars.join(', ')}`);
+                
                 return {
                     status: 500,
                     body: JSON.stringify({ 
-                        answer: 'Error de configuración del servicio. Por favor, verifica las variables de entorno.',
+                        answer: 'Error de configuración del servicio. Variables de entorno faltantes: ' + missingVars.join(', '),
                         sources: []
                     }),
                     headers: { 'Content-Type': 'application/json' }
@@ -268,10 +287,13 @@ Mantén un tono profesional y amigable.`;
 
         } catch (error) {
             context.log('❌ Error general en la API:', error);
+            context.log('❌ Error stack:', error.stack);
+            context.log('❌ Error message:', error.message);
+            
             return {
                 status: 500,
                 body: JSON.stringify({ 
-                    answer: 'Lo siento, hubo un error procesando tu solicitud. Por favor, intenta nuevamente.',
+                    answer: 'Lo siento, hubo un error procesando tu solicitud. Error: ' + error.message,
                     sources: []
                 }),
                 headers: { 'Content-Type': 'application/json' }
