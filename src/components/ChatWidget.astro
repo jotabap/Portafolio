@@ -200,7 +200,7 @@
       setLoading(true);
 
       try {
-        const response = await fetch('/api/chat', {
+        const response = await fetch('/api/chat-debug', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({ message: q })
@@ -212,6 +212,11 @@
         
         // Agregar respuesta del bot
         addMessage('Bot', data.answer);
+        
+        // Agregar información de debug si existe
+        if (data.debug) {
+          log.innerHTML += `<div style="font-size: 0.75rem; color: #666; margin-top: 0.5rem; background: #f0f0f0; padding: 0.5rem; border-radius: 0.25rem;"><pre>${JSON.stringify(data.debug, null, 2)}</pre></div>`;
+        }
         
         // Agregar fuentes si existen
         if (data.sources && data.sources.length > 0) {
