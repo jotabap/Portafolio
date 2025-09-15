@@ -10,12 +10,6 @@
       }
     },
     {
-      "route": "/src/*",
-      "headers": {
-        "Cache-Control": "public, max-age=31536000"
-      }
-    },
-    {
       "route": "/*",
       "rewrite": "/index.html"
     }
@@ -38,6 +32,6 @@
   },
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/api/*", "/_astro/*", "/src/*"]
+    "exclude": ["/api/*", "/_astro/*"]
   }
 }
