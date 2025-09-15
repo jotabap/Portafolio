@@ -16,7 +16,7 @@ app.http('chat', {
 
         try {
             const body = await request.text();
-            context.log('📥 Request body length:', body.length);
+            context.log('📥 Request received');
             
             if (!body) {
                 context.log('❌ No request body received');
@@ -34,7 +34,7 @@ app.http('chat', {
             try {
                 const parsed = JSON.parse(body);
                 message = parsed.message;
-                context.log('📝 Message received:', message?.substring(0, 100) + '...');
+                context.log('📝 Message received and parsed');
             } catch (e) {
                 context.log('❌ Error parsing JSON:', e.message);
                 return {
@@ -47,8 +47,9 @@ app.http('chat', {
                 };
             }
 
-            if (!message || typeof message !== 'string' || message.trim().length === 0) {
-                context.log('❌ Invalid message received');
+            // Validación robusta de input
+            if (!message || typeof message !== 'string') {
+                context.log('❌ Invalid message type');
                 return {
                     status: 400,
                     body: JSON.stringify({ 
@@ -58,6 +59,48 @@ app.http('chat', {
                     headers: { 'Content-Type': 'application/json' }
                 };
             }
+
+            const trimmedMessage = message.trim();
+            if (trimmedMessage.length === 0) {
+                context.log('❌ Empty message');
+                return {
+                    status: 400,
+                    body: JSON.stringify({ 
+                        answer: 'Por favor, envía un mensaje no vacío.',
+                        sources: []
+                    }),
+                    headers: { 'Content-Type': 'application/json' }
+                };
+            }
+
+            if (trimmedMessage.length > 1000) {
+                context.log('❌ Message too long');
+                return {
+                    status: 400,
+                    body: JSON.stringify({ 
+                        answer: 'El mensaje es demasiado largo. Por favor, hazlo más corto.',
+                        sources: []
+                    }),
+                    headers: { 'Content-Type': 'application/json' }
+                };
+            }
+
+            // Sanitización básica de input (remover scripts)
+            const sanitizedMessage = trimmedMessage.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+            
+            if (sanitizedMessage !== trimmedMessage) {
+                context.log('⚠️ Malicious content detected and removed');
+                return {
+                    status: 400,
+                    body: JSON.stringify({ 
+                        answer: 'Contenido no permitido detectado. Por favor, envía una pregunta normal.',
+                        sources: []
+                    }),
+                    headers: { 'Content-Type': 'application/json' }
+                };
+            }
+
+            message = sanitizedMessage;
 
             // Verificación rápida de contexto - solo para preguntas muy fuera de tema
             const veryOffTopicKeywords = [
@@ -279,24 +322,35 @@ Mantén un tono profesional y amigable.`;
                 }),
                 headers: { 
                     'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Origin': 'https://green-hill-0871db51e.1.azurestaticapps.net',
                     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-                    'Access-Control-Allow-Headers': 'Content-Type'
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'X-Content-Type-Options': 'nosniff',
+                    'X-Frame-Options': 'DENY'
                 }
             };
 
         } catch (error) {
-            context.log('❌ Error general en la API:', error);
-            context.log('❌ Error stack:', error.stack);
-            context.log('❌ Error message:', error.message);
+            context.log('❌ Error general en la API:', error.name);
+            context.log('❌ Error type:', typeof error);
+            
+            // No exponer detalles del error en producción
+            const isProduction = process.env.NODE_ENV === 'production';
+            const errorMessage = isProduction ? 
+                'Lo siento, hubo un error procesando tu solicitud. Por favor, intenta nuevamente.' :
+                'Lo siento, hubo un error procesando tu solicitud. Error: ' + error.message;
             
             return {
                 status: 500,
                 body: JSON.stringify({ 
-                    answer: 'Lo siento, hubo un error procesando tu solicitud. Error: ' + error.message,
+                    answer: errorMessage,
                     sources: []
                 }),
-                headers: { 'Content-Type': 'application/json' }
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': 'https://green-hill-0871db51e.1.azurestaticapps.net',
+                    'X-Content-Type-Options': 'nosniff'
+                }
             };
         }
     }
