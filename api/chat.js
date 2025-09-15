@@ -167,11 +167,11 @@ app.http('chat', {
                                 {
                                     vector: queryEmbedding,
                                     k: 5,
-                                    fields: "content_vector",
+                                    fields: "embeddings",
                                     kind: "vector"
                                 }
                             ],
-                            select: "content,source,chunk_id",
+                            select: "content,sources,id",
                             top: 5
                         })
                     });
@@ -181,8 +181,8 @@ app.http('chat', {
                         searchResults = searchData.value || [];
                         sources = searchResults.map((result, index) => ({
                             id: index + 1,
-                            title: result.source || 'Documento',
-                            chunk: result.chunk_id || 'Fragmento'
+                            title: result.sources || 'Documento',
+                            chunk: result.id || 'Fragmento'
                         }));
                         context.log(`✅ Búsqueda completada, ${searchResults.length} resultados encontrados`);
                     } else {
