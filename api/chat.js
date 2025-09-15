@@ -85,14 +85,14 @@ app.http('chat', {
             // Configuración de Azure desde variables de entorno
             const azureEndpoint = process.env.AZURE_OPENAI_ENDPOINT;
             const apiKey = process.env.AZURE_OPENAI_API_KEY;
-            const deploymentName = process.env.AZURE_OPENAI_DEPLOYMENT_NAME;
-            const embeddingDeployment = process.env.AZURE_OPENAI_EMBEDDING_DEPLOYMENT;
+            const deploymentName = process.env.AZURE_OPENAI_DEPLOYMENT_CHAT;
+            const embeddingDeployment = process.env.AZURE_OPENAI_DEPLOYMENT_EMBED;
             const apiVersion = process.env.AZURE_OPENAI_API_VERSION;
             
             // Configuración de Azure Search desde variables de entorno
             const searchEndpoint = process.env.AZURE_SEARCH_ENDPOINT;
-            const searchKey = process.env.AZURE_SEARCH_ADMIN_KEY;
-            const searchIndex = process.env.AZURE_SEARCH_INDEX_NAME;
+            const searchKey = process.env.AZURE_SEARCH_KEY;
+            const searchIndex = process.env.AZURE_SEARCH_INDEX;
 
             // Validar que todas las variables estén configuradas
             if (!azureEndpoint || !apiKey || !deploymentName || !embeddingDeployment || !searchEndpoint || !searchKey || !searchIndex) {
